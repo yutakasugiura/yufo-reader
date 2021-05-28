@@ -1,6 +1,5 @@
-from typing import final
 import tabula
-import re, os, glob, json
+import re, os, glob, json, shutil, datetime
 
 # pdf形式の有価証券報告書を、csvに変換する
 def createFinancialCsv(closingYear, targetPage):
@@ -10,10 +9,11 @@ def createFinancialCsv(closingYear, targetPage):
     # CSVが出力したい時
     data.to_csv('csv/' + fileName + ".csv", index=None)
     # 一時ファイルを出力
-    data.to_json('tmp/' + fileName + "_tmp.json", force_ascii=False, orient='split')
+    data.to_json('json/tmp/' + fileName + ".json", force_ascii=False, orient='split')
     readFinancialJson(fileName)
     # 一時ファイルを削除
-    os.remove('tmp/' + fileName + "_tmp.json")
+    shutil.rmtree('json/tmp/')
+    os.mkdir('json/tmp')
 
 def readFinancialPdf(path, targetPage):
     # 沿革読み取りの場合はFalse指定
@@ -27,7 +27,7 @@ def readFinancialPdf(path, targetPage):
 # データをクレンジングしたJsonを出力する
 def readFinancialJson(fileName):
 
-    openJson = open('tmp/' + fileName + "_tmp.json", 'r')
+    openJson = open('json/tmp/' + fileName + ".json", 'r')
     financialAll = json.load(openJson)
     result = []
     # レコードの処理
@@ -51,8 +51,13 @@ def readFinancialJson(fileName):
             # マイナス表記
             formatBySecond = formatByFirst.replace('△' ,'-')
             formatByBar = re.sub('-－﹣−‐⁃‑‒–—﹘―⎯⏤ーｰ─━' ,'-', formatBySecond)
+            # 平成表記の西暦化
+            if '平成' in formatByBar:
+                formattedYear = convertYear(formatByBar)
+            else:
+                formattedYear = formatByBar
             # 臨時従業員数の除去
-            formatByEmployee = formatByBar # TODO
+            formatByEmployee = formattedYear # TODO
             # int or float型に変換
             hasNumeric = is_num(formatByEmployee)
             if hasNumeric:
@@ -66,17 +71,26 @@ def readFinancialJson(fileName):
         result.append({'title' : header, 'data' : resultRecords})
 
 
-    fw = open('json/' + fileName + ".json",'w')
+    fw = open('json/tmp/' + fileName + ".json",'w')
     json.dump(result,fw,indent=2, ensure_ascii=False)
 
     createJsonForShashi(result, fileName)
 
+def convertYear(japaneseYear):
+    # 年数を取得（ex平成20年X月期。なお平成一桁・令和昭和はないと仮定）
+    termInfo = japaneseYear[4:]
+    removeHeisei = japaneseYear[2:4]
+    numericYear = int(removeHeisei)
+    # 平成の西暦を計算
+    year =  numericYear + 1988
+    return str(year) + termInfo
+
+    
+
 # The社史向けに必要データを抽出
 def createJsonForShashi(jsonData, fileName):
     result = []
-    # print(jsonData)
     for data in jsonData:
-        # print(data)
         if '1株' in data['title']:
             break
         if '営業収益' in data['title']:
@@ -93,7 +107,7 @@ def createJsonForShashi(jsonData, fileName):
         if 'undefined' in data['title']:
             result.append({'title': 'undefined', 'data': data['data']})
 
-    fw = open('shashi/' + fileName + ".json",'w')
+    fw = open('json/tmp_shashi/' + fileName + ".json",'w')
     json.dump(result,fw,indent=4, ensure_ascii=False)
 
 def readManyData():
@@ -108,10 +122,12 @@ def readManyData():
             createFinancialCsv(closingYear, targetPage)
         else:
             createFinancialCsv(closingYear,'2')
+    # jsonファイルのマージ        
+    mergeJsonData()
 
 # 複数ファイルのjsonを結合する
 def mergeJsonData():
-    files = glob.glob("shashi/*")
+    files = glob.glob("json/tmp_shashi/*")
     sortedfiles = sorted(files, reverse=False)
     all = []
     for file in sortedfiles:
@@ -133,10 +149,12 @@ def mergeJsonData():
                 if record['title'] == title:
                     tmp.append(record['data'])
         result.append({title: sum(tmp, [])})
-
-    fw = open('final/' + 'merged' + ".json",'w')
+    name = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M') + '_created'
+    fw = open('json/' + name + ".json",'w')
     json.dump(result,fw,indent=2, ensure_ascii=False)
 
+    shutil.rmtree('json/tmp_shashi/')
+    os.mkdir('json/tmp_shashi/')
 
 # 負の値を数字判定する
 def is_num(a):
@@ -148,4 +166,3 @@ def is_num(a):
 
 # execute
 readManyData()
-mergeJsonData()
