@@ -12,8 +12,8 @@ def createFinancialCsv(closingYear, targetPage):
     data.to_json('json/tmp/' + fileName + ".json", force_ascii=False, orient='split')
     readFinancialJson(fileName)
     # 一時ファイルを削除
-    shutil.rmtree('json/tmp/')
-    os.mkdir('json/tmp')
+    # shutil.rmtree('json/tmp/')
+    # os.mkdir('json/tmp')
 
 def readFinancialPdf(path, targetPage):
     # 沿革読み取りの場合はFalse指定
@@ -62,15 +62,26 @@ def readFinancialJson(fileName):
             hasNumeric = is_num(formatByEmployee)
             if hasNumeric:
                 formatLast = int(formatByEmployee)
+                #単位変換
+                formatLast
             else:
                 formatLast = formatByEmployee     
             # 配列に格納
             if formatLast is not None:
                 resultRecords.append(formatLast)
 
-        result.append({'title' : header, 'data' : resultRecords})
+        result.append({'title' : header, 'data': resultRecords})
 
-
+    #決算年月がない場合に推測取得
+    hasYear = False
+    for searchYears in result:
+        if '決算' in searchYears['title']:
+            hasYear = True
+    if hasYear == False:
+        for suggestYears in result:
+            result.append({'title': '決算', 'data': suggestYears['data']})
+            break
+    
     fw = open('json/tmp/' + fileName + ".json",'w')
     json.dump(result,fw,indent=2, ensure_ascii=False)
 
@@ -88,9 +99,11 @@ def convertYear(japaneseYear):
 # The社史向けに必要データを抽出
 def createJsonForShashi(jsonData, fileName):
     result = []
+    print('========json========')
+    # print(jsonData)
+
     for data in jsonData:
-        if '1株' in data['title']:
-            break
+        # print(data)
         if '営業収益' in data['title']:
             result.append({'title': data['title'], 'data': data['data']});
         if '売上' in data['title']:
@@ -99,12 +112,8 @@ def createJsonForShashi(jsonData, fileName):
             result.append({'title': data['title'], 'data': data['data']})
         if '従業員' in data['title']:
             result.append({'title': '従業員数', 'data': data['data']})
-        if '決算年月' in data['title']:
+        if '決算' in data['title']:
             result.append({'title': 'closing_years', 'data': data['data']})
-        # 決算年月がない場合、undefinedを追加
-        if 'undefined' in data['title']:
-            result.append({'title': 'undefined', 'data': data['data']})
-
     fw = open('json/tmp_shashi/' + fileName + ".json",'w')
     json.dump(result,fw,indent=4, ensure_ascii=False)
 
@@ -153,11 +162,11 @@ def mergeJsonData():
         undefinedSignals = list(set(uniqueSignals) - set(partSignals))
         if undefinedSignals is not None:
             # 存在しない勘定科目に、年度分のnullデータを格納
+            
             length = len(records['data'][0]['data'])
             emptyLists = []
             for num in range(length):
                 emptyLists.append('-')
-
 
             for undefinedSignal in undefinedSignals:
                 records['data'].append({'title': undefinedSignal, 'data': emptyLists})

@@ -1,0 +1,398 @@
+[
+  {
+    "title": "売上高",
+    "data": [
+      "(百万円)",
+      18583653,
+      22064192,
+      25691911,
+      27234521,
+      28403118
+    ]
+  },
+  {
+    "title": "税金等調整前当期純利益 ",
+    "data": [
+      "undefined",
+      432873,
+      1403649,
+      2441080,
+      2892828,
+      2983381
+    ]
+  },
+  {
+    "title": "当社株主に帰属する",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "undefined",
+    "data": [
+      "(百万円)",
+      283559,
+      962163,
+      1823119,
+      2173338,
+      2312694
+    ]
+  },
+  {
+    "title": "当期純利益",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "包括利益",
+    "data": [
+      "(百万円)",
+      341694,
+      1934156,
+      2892501,
+      3294275,
+      1517486
+    ]
+  },
+  {
+    "title": "純資産額",
+    "data": [
+      "(百万円)",
+      11066478,
+      12772856,
+      15218987,
+      17647329,
+      18088186
+    ]
+  },
+  {
+    "title": "総資産額",
+    "data": [
+      "(百万円)",
+      30650965,
+      35483317,
+      41437473,
+      47729830,
+      47427597
+    ]
+  },
+  {
+    "title": "1株当たり株主資本",
+    "data": [
+      "(円)",
+      "3331.51",
+      "3835.30",
+      "4564.74",
+      "5334.96",
+      "5513.08"
+    ]
+  },
+  {
+    "title": "基本1株当たり",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "当社普通株主に",
+    "data": [
+      "(円)",
+      "90.21",
+      "303.82",
+      "575.30",
+      "688.02",
+      "741.36"
+    ]
+  },
+  {
+    "title": "帰属する当期純利益",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "希薄化後1株当たり",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "当社普通株主に",
+    "data": [
+      "(円)",
+      "90.20",
+      "303.78",
+      "574.92",
+      "687.66",
+      "735.36"
+    ]
+  },
+  {
+    "title": "帰属する当期純利益",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "株主資本比率",
+    "data": [
+      "(%)",
+      "34.4",
+      "34.2",
+      "34.9",
+      "35.2",
+      "35.3"
+    ]
+  },
+  {
+    "title": "株主資本当社普通株主に",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "undefined",
+    "data": [
+      "(%)",
+      "2.7",
+      "8.5",
+      "13.7",
+      "13.9",
+      "13.8"
+    ]
+  },
+  {
+    "title": "帰属する当期純利益率",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "株価収益率",
+    "data": [
+      "(倍)",
+      "39.6",
+      "16.0",
+      "10.1",
+      "12.2",
+      "8.0"
+    ]
+  },
+  {
+    "title": "営業活動による",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "undefined",
+    "data": [
+      "(百万円)",
+      1452435,
+      2451316,
+      3646035,
+      3685753,
+      4460857
+    ]
+  },
+  {
+    "title": "キャッシュフロー",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "投資活動による",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "undefined",
+    "data": [
+      "(百万円)-1442658-3027312-4336248-3813490-3182544",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "キャッシュフロー",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "財務活動による",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "undefined",
+    "data": [
+      "(百万円)-",
+      355347,
+      477242,
+      919480,
+      "306045-",
+      423571
+    ]
+  },
+  {
+    "title": "キャッシュフロー",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "現金及び現金同等物",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "undefined",
+    "data": [
+      "(百万円)",
+      1679200,
+      1718297,
+      2041170,
+      2284557,
+      2939428
+    ]
+  },
+  {
+    "title": "期末残高",
+    "data": [
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "従業員数",
+    "data": [
+      "undefined",
+      325905,
+      333498,
+      338875,
+      344109,
+      348877
+    ]
+  },
+  {
+    "title": "undefined",
+    "data": [
+      "(人)",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined",
+      "undefined"
+    ]
+  },
+  {
+    "title": "[外、平均臨時雇用員]",
+    "data": [
+      "undefined",
+      "[75757]",
+      "[83190]",
+      "[85778]",
+      "[85848]",
+      "[86843]"
+    ]
+  },
+  {
+    "title": "決算",
+    "data": [
+      "(百万円)",
+      18583653,
+      22064192,
+      25691911,
+      27234521,
+      28403118
+    ]
+  }
+]
