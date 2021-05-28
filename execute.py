@@ -9,20 +9,24 @@ def createFinancialCsv(closingYear, targetPage):
     # CSVが出力したい時
     data.to_csv('csv/' + fileName + ".csv", index=None)
     # 一時ファイルを出力
-    data.to_json('yufo/' + fileName + "_tmp.json", force_ascii=False, orient='split')
+    data.to_json('tmp/' + fileName + "_tmp.json", force_ascii=False, orient='split')
     readFinancialJson(fileName)
     # 一時ファイルを削除
-    os.remove('yufo/' + fileName + "_tmp.json")
+    os.remove('tmp/' + fileName + "_tmp.json")
 
 def readFinancialPdf(path, targetPage):
     # 沿革読み取りの場合はFalse指定
-    dfs = tabula.read_pdf(path, lattice=False, pages = targetPage, encoding="utf-8")
-    return dfs[0]
+    try:
+        print(path + 'を読み込んでいます')
+        dfs = tabula.read_pdf(path, lattice=False, pages=targetPage, encoding="utf-8")
+        return dfs[0]
+    except ZeroDivisionError as e:
+        print('有価証券報告書のページの指定が正しくないか、読み込めないデータです')
 
 # データをクレンジングしたJsonを出力する
 def readFinancialJson(fileName):
 
-    openJson = open('yufo/' + fileName + "_tmp.json", 'r')
+    openJson = open('tmp/' + fileName + "_tmp.json", 'r')
     financialAll = json.load(openJson)
     result = []
     # レコードの処理
@@ -60,7 +64,46 @@ def readFinancialJson(fileName):
 
         result.append({header: resultRecords})
 
+
     fw = open('json/' + fileName + ".json",'w')
+    json.dump(result,fw,indent=4, ensure_ascii=False)
+
+    createJsonForShashi(result, fileName)
+
+# The社史向けに必要データを抽出
+def createJsonForShashi(jsonData, fileName):
+    result = []
+    for data in jsonData:
+        for key in data.keys():
+            # 回避要件
+            if '投資' in key:
+                break
+            elif '株' in key:
+                break
+            elif '自己資本' in key:
+                break
+            # 追加要件
+            elif '売上' in key:
+                result.append(data)
+                break
+            elif '収益' in key:
+                result.append(data)
+                break
+            elif '利益' in key:
+                result.append(data)
+                break
+            elif '従業員' in key:
+                result.append(data)
+                break
+            elif '決算年月' in key:
+                result.append(data)
+                break
+            # 決算年月がない場合、undefinedを追加
+            else:
+                if 'undefined' in key:
+                    result.append(data)
+    
+    fw = open('shashi/' + fileName + ".json",'w')
     json.dump(result,fw,indent=4, ensure_ascii=False)
 
 def readManyData():
@@ -73,13 +116,7 @@ def readManyData():
             targetPage = closingYear[readPage+len('p'):]
             createFinancialCsv(closingYear, targetPage)
         else:
-            createFinancialCsv(closingYear,'2')
-
-# 複数のjsonを統合
-def mergeJsonList():
-    files = glob.glob("json/*")
-    for file in files:
-            
+            createFinancialCsv(closingYear,'2')            
 
 # 負の値を数字判定する
 def is_num(a):
@@ -90,5 +127,4 @@ def is_num(a):
     return True
 
 # execute
-# createFinancialCsv('2020','4')
 readManyData()
