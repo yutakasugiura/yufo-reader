@@ -85,8 +85,6 @@ def convertYear(japaneseYear):
     year =  numericYear + 1988
     return str(year) + termInfo
 
-    
-
 # The社史向けに必要データを抽出
 def createJsonForShashi(jsonData, fileName):
     result = []
@@ -133,22 +131,47 @@ def mergeJsonData():
     for file in sortedfiles:
         openJson = open(file, 'r')
         data = json.load(openJson)
-        all.append(data)
+        all.append({'id': file, 'data': data})
 
     targetSignals = []
     for signalAll in all:
-        for signal in signalAll:
+        for signal in signalAll['data']:
             targetSignals.append(signal['title'])
 
     uniqueSignals = list(set(targetSignals))
+
     result = []
+
+    # 有報1枚単位に分割
+    for records in all:
+        # 存在する勘定科目を取得
+        partSignals = []
+        for record in records['data']:
+            partSignals.append(record['title'])
+
+        # 差分から存在しない勘定科目を取得
+        undefinedSignals = list(set(uniqueSignals) - set(partSignals))
+        if undefinedSignals is not None:
+            # 存在しない勘定科目に、年度分のnullデータを格納
+            length = len(records['data'][0]['data'])
+            emptyLists = []
+            for num in range(length):
+                emptyLists.append('-')
+
+
+            for undefinedSignal in undefinedSignals:
+                records['data'].append({'title': undefinedSignal, 'data': emptyLists})
+
     for title in uniqueSignals:
         tmp = []
-        for records in all:
-            for record in records:
-                if record['title'] == title:
-                    tmp.append(record['data'])
+        for finalRecords in all:
+            # 決算年月の配列格納数を取得
+            for finalRecord in finalRecords['data']:
+                if finalRecord['title'] == title:
+                    tmp.append(finalRecord['data'])
+
         result.append({title: sum(tmp, [])})
+
     name = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M') + '_created'
     fw = open('json/' + name + ".json",'w')
     json.dump(result,fw,indent=2, ensure_ascii=False)
