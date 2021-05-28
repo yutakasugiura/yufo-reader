@@ -1,3 +1,4 @@
+from typing import final
 import tabula
 import re, os, glob, json
 
@@ -62,53 +63,43 @@ def readFinancialJson(fileName):
             if formatLast is not None:
                 resultRecords.append(formatLast)
 
-        result.append({header: resultRecords})
+        result.append({'title' : header, 'data' : resultRecords})
 
 
     fw = open('json/' + fileName + ".json",'w')
-    json.dump(result,fw,indent=4, ensure_ascii=False)
+    json.dump(result,fw,indent=2, ensure_ascii=False)
 
     createJsonForShashi(result, fileName)
 
 # The社史向けに必要データを抽出
 def createJsonForShashi(jsonData, fileName):
     result = []
+    # print(jsonData)
     for data in jsonData:
-        for key in data.keys():
-            # 回避要件
-            if '投資' in key:
-                break
-            elif '株' in key:
-                break
-            elif '自己資本' in key:
-                break
-            # 追加要件
-            elif '売上' in key:
-                result.append(data)
-                break
-            elif '収益' in key:
-                result.append(data)
-                break
-            elif '利益' in key:
-                result.append(data)
-                break
-            elif '従業員' in key:
-                result.append(data)
-                break
-            elif '決算年月' in key:
-                result.append(data)
-                break
-            # 決算年月がない場合、undefinedを追加
-            else:
-                if 'undefined' in key:
-                    result.append(data)
-    
+        # print(data)
+        if '1株' in data['title']:
+            break
+        if '営業収益' in data['title']:
+            result.append({'title': data['title'], 'data': data['data']});
+        if '売上' in data['title']:
+            result.append({'title': data['title'], 'data': data['data']})
+        if '利益' in data['title']:
+            result.append({'title': data['title'], 'data': data['data']})
+        if '従業員' in data['title']:
+            result.append({'title': '従業員数', 'data': data['data']})
+        if '決算年月' in data['title']:
+            result.append({'title': 'closing_years', 'data': data['data']})
+        # 決算年月がない場合、undefinedを追加
+        if 'undefined' in data['title']:
+            result.append({'title': 'undefined', 'data': data['data']})
+
     fw = open('shashi/' + fileName + ".json",'w')
     json.dump(result,fw,indent=4, ensure_ascii=False)
 
 def readManyData():
     files = glob.glob("yufo/*")
-    for file in files:
+    sortedfiles = sorted(files, reverse=False)
+    for file in sortedfiles:
         cutDirName = file.replace('yufo/' ,'')
         closingYear = cutDirName.replace('.pdf' ,'')
         readPage = closingYear.find('p')
@@ -116,7 +107,36 @@ def readManyData():
             targetPage = closingYear[readPage+len('p'):]
             createFinancialCsv(closingYear, targetPage)
         else:
-            createFinancialCsv(closingYear,'2')            
+            createFinancialCsv(closingYear,'2')
+
+# 複数ファイルのjsonを結合する
+def mergeJsonData():
+    files = glob.glob("shashi/*")
+    sortedfiles = sorted(files, reverse=False)
+    all = []
+    for file in sortedfiles:
+        openJson = open(file, 'r')
+        data = json.load(openJson)
+        all.append(data)
+
+    targetSignals = []
+    for signalAll in all:
+        for signal in signalAll:
+            targetSignals.append(signal['title'])
+
+    uniqueSignals = list(set(targetSignals))
+    result = []
+    for title in uniqueSignals:
+        tmp = []
+        for records in all:
+            for record in records:
+                if record['title'] == title:
+                    tmp.append(record['data'])
+        result.append({title: sum(tmp, [])})
+
+    fw = open('final/' + 'merged' + ".json",'w')
+    json.dump(result,fw,indent=2, ensure_ascii=False)
+
 
 # 負の値を数字判定する
 def is_num(a):
@@ -128,3 +148,4 @@ def is_num(a):
 
 # execute
 readManyData()
+mergeJsonData()
