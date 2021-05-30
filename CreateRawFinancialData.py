@@ -5,7 +5,7 @@ import glob, os
 class CreateRawFinancialData:
 
     PDF_DIR = 'yufo/financial/'
-    CSV_DIR = 'csv/'
+    CSV_DIR = 'csv/financial/'
     PDF_EXTENTION = '.pdf'
     CSV_EXTENTION = '.csv'
 
