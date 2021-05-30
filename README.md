@@ -19,4 +19,5 @@
 Domainディレクトリのファイルを実行
 python Domain/CreateRawFinancialData.py
 python Domain/CreateRawHistoricalData.py
+python Domain/CreateHistoricalJson.py
 ```

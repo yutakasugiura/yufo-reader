@@ -38,15 +38,15 @@ class CreateHistoricalJson:
             for count, historicalEvent in enumerate(historicalEvents):
                 # 自動タグ付与
                 eventTags = CreateHistoricalJson.suggestTag(historicalEvent[1], count)
-                # 年月をYYYY/MM or YYYYに変換 （平成昭和は未対応・・・・）
-                if '月' in historicalEvent[0]:
-                    formattedYear = historicalEvent[0].replace('年', '/')
-                    formattedDate = formattedYear.replace('月', '')
-                else:
-                    formattedYear = historicalEvent[0].replace('年', '')
+                # 年月をYYYY/MM or YYYYに変換 （これは使わない方向でいく）
+                # if '月' in historicalEvent[0]:
+                #     formattedYear = historicalEvent[0].replace('年', '/')
+                #     formattedDate = formattedYear.replace('月', '')
+                # else:
+                #     formattedYear = historicalEvent[0].replace('年', '')
                 
                 eventObject = {
-                    "year": formattedDate, # 年月をYYYY-mmに統一（将来的に...）
+                    "year": historicalEvent[0], # 年月をYYYY-mmに統一（将来的に...）
                     "summary": historicalEvent[1],
                     "detail": None,
                     "tag": eventTags
@@ -67,13 +67,13 @@ class CreateHistoricalJson:
         # 連想ワードリストを読み込む
         tagMasters = CreateHistoricalJson.readSuggestWordList()
 
-        for tagMaster in tagMasters:
-            if tagMaster['word'] in historicalEvent:
-                suggestionTags.append(tagMaster['tag'])
-
-        # タグの特殊処理(2) 沿革の最初は必ず「創業」を含める
+        # タグの特殊処理 沿革の最初は必ず「創業」のみとする
         if count == 0:
             suggestionTags.append('創業')
+        else:
+            for tagMaster in tagMasters:
+                if tagMaster['word'] in historicalEvent:
+                    suggestionTags.append(tagMaster['tag'])
 
         #重複タグを解消して返却
         return list(set(suggestionTags))
