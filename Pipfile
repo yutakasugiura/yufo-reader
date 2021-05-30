@@ -10,6 +10,7 @@ pandas = "*"
 python-csv = "*"
 colored = "*"
 fg = "*"
+lazyasd = "*"
 
 [dev-packages]
 

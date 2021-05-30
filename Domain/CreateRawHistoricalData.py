@@ -43,7 +43,6 @@ class CreateRawHistoricalData:
                 firstPage = int(removedFileName[firstPageIndex + 1:lastPageIndex])         
                 lastPage = int(removedFileName[lastPageIndex + 1:])
                 readPages = list(range(firstPage, lastPage + 1, 1))
-                print(readPages)
             else:
                 readPages = [removedFileName[5:]]
 
