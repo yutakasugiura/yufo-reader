@@ -46,7 +46,6 @@ class CreateRawHistoricalData:
             else:
                 readPages = [removedFileName[5:]]
 
-            # コードが冗長になるので連続した2ページのみ対応（いつか改修せねば）
             financialPdfList.append({
                  'stockCode': removedFileName[:4],
                  'readPages': readPages,
