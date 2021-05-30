@@ -11,6 +11,7 @@ python-csv = "*"
 colored = "*"
 fg = "*"
 lazyasd = "*"
+datetime = "*"
 
 [dev-packages]
 
