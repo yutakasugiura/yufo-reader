@@ -8,6 +8,8 @@ numpy = "*"
 tabula-py = "*"
 pandas = "*"
 python-csv = "*"
+colored = "*"
+fg = "*"
 
 [dev-packages]
 
