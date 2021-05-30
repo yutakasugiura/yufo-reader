@@ -1,8 +1,8 @@
 import tabula
 from colored import fg, bg, attr
-import re, os, glob, json, shutil, datetime
+import glob
 
-class ReadFinancialPdf:
+class CreateRawFinancialData:
 
     PDF_DIR = 'yufo/'
     CSV_DIR = 'csv/'
@@ -11,12 +11,14 @@ class ReadFinancialPdf:
 
     def execute(self) -> list:
         # 処理準備
-        companyName = ReadFinancialPdf.inputCompanyName()
-
-        # 本番処理
+        companyName = CreateRawFinancialData.inputCompanyName()
+        # 処理実行
         print('%s%s 処理を開始します %s' % (fg('black'), bg('grey_93'), attr('reset')))
-        financialPdfList = ReadFinancialPdf.importPdf(self)
-        financialObject = ReadFinancialPdf.createFinancialData(self, financialPdfList, companyName)
+        financialPdfList = CreateRawFinancialData.importPdf(self)
+
+        # CSV出力（JSON対応したい場合は下記に記載すること）
+        CreateRawFinancialData.createFinancialData(self, financialPdfList, companyName)
+
         print('%s%s 処理を完了しました %s' % (fg('black'), bg('green'), attr('reset')))
 
     def inputCompanyName() -> str:
@@ -43,8 +45,8 @@ class ReadFinancialPdf:
     
     def createFinancialData(self, financialPdfList: list, companyName: str) -> list:
         for pdf in financialPdfList:
-            financialDataObject = ReadFinancialPdf.readPdf(self, pdf)
-            ReadFinancialPdf.createCsv(self, financialDataObject, companyName + str(pdf['closingYear']))
+            financialDataObject = CreateRawFinancialData.readPdf(self, pdf)
+            CreateRawFinancialData.createCsv(self, financialDataObject, companyName + str(pdf['closingYear']))
             
     def readPdf(self, financialPdf: object) -> object:
         print(financialPdf['closingYear'] + ': 読み込みを開始します')
@@ -62,7 +64,5 @@ class ReadFinancialPdf:
         except:
             print('%s%s csvの作成に失敗しました。ページ指定を見直してください %s' % (fg('white'), bg('red'), attr('reset')))
 
-                
-
 # execute
-ReadFinancialPdf().execute()
+CreateRawFinancialData().execute()
